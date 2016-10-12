@@ -36,6 +36,7 @@ So far the following commands work:
 1. `Alexa ask calendar today` - lists events happening today
 1. `Alexa ask calendar tomorrow` - lists events happening tomorrow
 1. `Alexa ask calendar Monday` (or any other day) - lists events happening on the next day given
+1. `Alexa ask calendar this week` - lists events between today and next Sunday
 1. `Alexa ask calendar next week` - lists a full week of events starting from next Monday
 
 Note that if you used something other than `calendar` for the invocation word, you must substitute that in the above examples.

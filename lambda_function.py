@@ -58,6 +58,9 @@ def get_events(query):
     elif query == "next week":
         query_start = next_weekday(today, 0)
         query_end = query_start + datetime.timedelta(6)
+    elif query == "this week":
+        query_start = today
+        query_end = next_weekday(today, 6)
 
     api = apple_calendar_api.API(username, password)
     if query_day != "":
