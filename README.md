@@ -32,6 +32,7 @@ An example Alexa Skill to read upcoming events from Apple Calendar, written in P
 ## Examples
 
 So far the following commands work:
+
 1. `Alexa ask calendar today` - lists events happening today
 1. `Alexa ask calendar tomorrow` - lists events happening tomorrow
 1. `Alexa ask calendar Monday` (or any other day) - lists events happening on the next day given
@@ -42,8 +43,8 @@ Note that if you used something other than `calendar` for the invocation word, y
 ## Known Issues
 
 1. Currently you can't add new events as the Apple web service doesn't allow this.
-1. Doesn't work if you use 2 factor authentication to protect your Apple account.
-1. As a consequence of 2, I receive an email from Apple every single time it runs telling me I have logged into a new computer so I've set my email host to delete all these.
+1. Doesn't work if you use 2 Factor Authentication to protect your Apple account.
+1. As a consequence of the point above, I receive an email from Apple every single time it runs telling me I have logged into a new computer so I've set my email host to delete all these.
 
 ## Acknowledgements
 
