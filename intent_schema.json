@@ -1,0 +1,13 @@
+{
+    "intents": [
+        {
+            "intent": "ac_query",
+            "slots": [
+                {
+                    "name": "response",
+                    "type": "LITERAL"
+                }
+            ]
+        }
+    ]
+}
