@@ -5,7 +5,7 @@
             "slots": [
                 {
                     "name": "response",
-                    "type": "LITERAL"
+                    "type": "RESPONSES"
                 }
             ]
         }

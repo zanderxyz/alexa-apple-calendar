@@ -23,7 +23,7 @@ An example Alexa Skill to read upcoming events from Apple Calendar, written in P
    - Consider extending the timeout beyond the default of 3 seconds (I raised mine to 10, which is likely excessive, but may eliminate some sporadic errors)
 1. Create a new [Alexa
    Skill](https://developer.amazon.com/edw/home.html#/skill/create) using
-   `intent_schema.json` and `sample_utterances.txt`. You can choose your own word for invocation (I use `calendar`).
+   `intent_schema.json` and `sample_utterances.txt`. You will need to create a custom slot type called "RESPONSES" containing the text in the `custom_slot_types.txt` file. You can choose your own word for invocation (I use `calendar`).
 1. **Don't publish** the skill (because it includes your Apple ID username and password), leave it in development mode
 1. Test that it's working from the web interface during the creation of the
    skill

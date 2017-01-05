@@ -1,10 +1,1 @@
-ac_query {today|response}
-ac_query {tomorrow|response}
-ac_query {Monday|response}
-ac_query {Tuesday|response}
-ac_query {Wednesday|response}
-ac_query {Thursday|response}
-ac_query {Friday|response}
-ac_query {Saturday|response}
-ac_query {Sunday|response}
-ac_query {next week|response}
+ac_query {response}
