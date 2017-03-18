@@ -5,7 +5,7 @@
             "slots": [
                 {
                     "name": "response",
-                    "type": "RESPONSES"
+                    "type": "AMAZON.DATE"
                 }
             ]
         }

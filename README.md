@@ -10,7 +10,7 @@ An example Alexa Skill to read upcoming events from Apple Calendar, written in P
 ## Quick Start
 
 1. Open `lambda_function.py`, fill in your Apple ID username and password at the top and save. If you use 2 factor authentication then you will need to turn it off, as the Apple web service doesn't seem to work with app specific passwords.
-1. Zip up the three folders (pytz, requests & tzlocal) and the two .py files (apple_calendar_api.py and lambda_function.py) into a single zip file.
+1. Zip up the four folders (dateutil, pytz, requests & tzlocal) and the three .py files (apple_calendar_api.py, isoweek.py and lambda_function.py) into a single zip file.
 1. Create an [AWS Lambda](https://console.aws.amazon.com/console/home) function
    using your zip file as the code
    - You can follow the [official Amazon
@@ -23,7 +23,7 @@ An example Alexa Skill to read upcoming events from Apple Calendar, written in P
    - Consider extending the timeout beyond the default of 3 seconds (I raised mine to 10, which is likely excessive, but may eliminate some sporadic errors)
 1. Create a new [Alexa
    Skill](https://developer.amazon.com/edw/home.html#/skill/create) using
-   `intent_schema.json` and `sample_utterances.txt`. You will need to create a custom slot type called "RESPONSES" containing the text in the `custom_slot_types.txt` file. You can choose your own word for invocation (I use `calendar`).
+   `intent_schema.json` and `sample_utterances.txt`. You can choose your own word for invocation (I use `calendar`).
 1. **Don't publish** the skill (because it includes your Apple ID username and password), leave it in development mode
 1. Test that it's working from the web interface during the creation of the
    skill

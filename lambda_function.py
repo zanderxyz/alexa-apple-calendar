@@ -1,6 +1,9 @@
 import apple_calendar_api
 import datetime
 import calendar
+import isoweek
+import dateutil.parser
+import math
 
 # Fill in your Apple ID username and password
 username = ''
@@ -14,6 +17,32 @@ password = ''
 # variable to a day that has an event in the calendar you are looking for.
 # Run the file and extract the 'pGuid' variable from the event response.
 calendars_to_exclude = []
+
+ZERO = datetime.timedelta(0)
+
+class UTC(datetime.tzinfo):
+  def utcoffset(self, dt):
+    return ZERO
+  def tzname(self, dt):
+    return "UTC"
+  def dst(self, dt):
+    return ZERO
+
+utc = UTC()
+
+# Round datetimes up to nearest 30 minutes
+def ceil_dt(dt):
+    # how many secs have passed this hour
+    nsecs = dt.minute*60 + dt.second + dt.microsecond*1e-6
+    # number of seconds to next quarter hour mark
+    # Non-analytic (brute force is fun) way:
+    #   delta = next(x for x in xrange(0,3601,900) if x>=nsecs) - nsecs
+    # analytic way:
+    delta = math.ceil(nsecs / 900) * 900 - nsecs
+    #time + number of seconds to quarter hour mark.
+    return dt + datetime.timedelta(seconds=delta)
+
+timedelta = datetime.timedelta(0)
 
 def next_weekday(d, weekday):
     days_ahead = weekday - d.weekday()
@@ -33,40 +62,20 @@ def get_date_desc(e):
     else:
         return calendar.day_name[d.weekday()]
 
-def get_events(query):
-    today = datetime.date.today()
-    query = query.lower()
+def get_events(isodate):
     query_day = ""
-    if query == "today":
-        query_day = today
-    elif query == "tomorrow":
-        query_day = today + datetime.timedelta(1)
-    elif query == "monday":
-        query_day = next_weekday(today, 0)
-    elif query == "tuesday":
-        query_day = next_weekday(today, 1)
-    elif query == "wednesday":
-        query_day = next_weekday(today, 2)
-    elif query == "thursday":
-        query_day = next_weekday(today, 3)
-    elif query == "friday":
-        query_day = next_weekday(today, 4)
-    elif query == "saturday":
-        query_day = next_weekday(today, 5)
-    elif query == "sunday":
-        query_day = next_weekday(today, 6)
-    elif query == "next week":
-        query_start = next_weekday(today, 0)
-        query_end = query_start + datetime.timedelta(6)
-    elif query == "this week":
-        query_start = today
-        query_end = next_weekday(today, 6)
+    try:
+        query_day = dateutil.parser.parse(isodate)
+    except:
+        week = isoweek.Week.fromstring(isodate)
+        query_start = week.monday()
+        query_end = week.sunday()
 
     api = apple_calendar_api.API(username, password)
     if query_day != "":
-        events = api.calendar.events(query_day, query_day)
+        events = api.calendar.events(query_day-timedelta, query_day-timedelta)
     else:
-        events = api.calendar.events(query_start, query_end)
+        events = api.calendar.events(query_start-timedelta, query_end-timedelta)
 
     events = [e for e in events if not e['pGuid'] in calendars_to_exclude]
     events.sort(key=lambda x: get_date(x))
@@ -119,6 +128,7 @@ def event_to_nl(e, include_day=False):
     return response.replace("&", "and").replace("!@#$%^*()[]{};:/<>?\|`~-=_+", " ")
 
 def lambda_handler(event, context):
+    global timedelta
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
     etc.) The JSON body of the request is provided in the event parameter.
     """
@@ -133,6 +143,10 @@ def lambda_handler(event, context):
     #if (event['session']['application']['applicationId'] !=
     #        "amzn1.echo-sdk-ams.app.[unique-value-here]"):
     #    raise ValueError("Invalid Application ID")
+
+    timestamp = dateutil.parser.parse(event['request']['timestamp'])
+    timedelta = ceil_dt(datetime.datetime.now(utc)) - ceil_dt(timestamp)
+    print timedelta
 
     if event['session']['new']:
         on_session_started({'requestId': event['request']['requestId']},
