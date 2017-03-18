@@ -104,8 +104,8 @@ def events_to_nl(events):
             return response
 
 def event_to_nl(e, include_day=False):
-    time = e['startDate'][4]+timedelta.seconds//3600
-    mins = e['startDate'][5]+((timedelta.seconds//60)%60)
+    time = e['startDate'][4]-timedelta.seconds//3600
+    mins = e['startDate'][5]-((timedelta.seconds//60)%60)
     if mins > 60:
         mins -= 60
         time += 1
