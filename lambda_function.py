@@ -30,17 +30,19 @@ class UTC(datetime.tzinfo):
 
 utc = UTC()
 
-# Round datetimes up to nearest 30 minutes
-def ceil_dt(dt):
-    # how many secs have passed this hour
-    nsecs = dt.minute*60 + dt.second + dt.microsecond*1e-6
-    # number of seconds to next quarter hour mark
-    # Non-analytic (brute force is fun) way:
-    #   delta = next(x for x in xrange(0,3601,900) if x>=nsecs) - nsecs
-    # analytic way:
-    delta = math.ceil(nsecs / 900) * 900 - nsecs
-    #time + number of seconds to quarter hour mark.
-    return dt + datetime.timedelta(seconds=delta)
+def round_timedelta(td, period):
+    """
+    Rounds the given timedelta by the given timedelta period
+    :param td: `timedelta` to round
+    :param period: `timedelta` period to round by.
+    """
+    period_seconds = period.total_seconds()
+    half_period_seconds = period_seconds / 2
+    remainder = td.total_seconds() % period_seconds
+    if remainder >= half_period_seconds:
+        return datetime.timedelta(seconds=td.total_seconds() + (period_seconds - remainder))
+    else:
+        return datetime.timedelta(seconds=td.total_seconds() - remainder)
 
 timedelta = datetime.timedelta(0)
 
@@ -102,8 +104,11 @@ def events_to_nl(events):
             return response
 
 def event_to_nl(e, include_day=False):
-    time = e['startDate'][4]
-    mins = e['startDate'][5]
+    time = e['startDate'][4]+timedelta.seconds//3600
+    mins = e['startDate'][5]+((timedelta.seconds//60)%60)
+    if mins > 60:
+        mins -= 60
+        time += 1
     if time >= 12:
         if time > 12: time = int(time) - 12
         time = "%d" % time
@@ -145,7 +150,8 @@ def lambda_handler(event, context):
     #    raise ValueError("Invalid Application ID")
 
     timestamp = dateutil.parser.parse(event['request']['timestamp'])
-    timedelta = ceil_dt(datetime.datetime.now(utc)) - ceil_dt(timestamp)
+    timedelta = datetime.datetime.now(utc) - timestamp
+    timedelta = round_timedelta(timedelta, datetime.timedelta(minutes=30))
     print timedelta
 
     if event['session']['new']:
