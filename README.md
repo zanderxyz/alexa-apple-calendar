@@ -1,13 +1,15 @@
-# alexa-apple-calendar
+# Native support for Apple Calendar has been added to Alexa so this repo is not no longer needed.
+
+## alexa-apple-calendar
 
 An example Alexa Skill to read upcoming events from Apple Calendar, written in Python.
 
-## Dependencies
+### Dependencies
 
 - An [AWS account](https://console.aws.amazon.com/console/home)
 - A pre-existing Apple ID with events in the calendar.
 
-## Quick Start
+### Quick Start
 
 1. Open `lambda_function.py`, fill in your Apple ID username and password at the top and save. If you use 2 factor authentication then you will need to turn it off, as the Apple web service doesn't seem to work with app specific passwords.
 1. Zip up the four folders (dateutil, pytz, requests & tzlocal) and the three .py files (apple_calendar_api.py, isoweek.py and lambda_function.py) into a single zip file.
@@ -29,7 +31,7 @@ An example Alexa Skill to read upcoming events from Apple Calendar, written in P
    skill
 1. Test that it's working with your Echo
 
-## Examples
+### Examples
 
 So far the following commands work:
 
@@ -41,13 +43,13 @@ So far the following commands work:
 
 Note that if you used something other than `calendar` for the invocation word, you must substitute that in the above examples.
 
-## Known Issues
+### Known Issues
 
 1. Currently you can't add new events as the Apple web service doesn't allow this.
 1. Doesn't work if you use 2 Factor Authentication to protect your Apple account.
 1. As a consequence of the point above, I receive an email from Apple every single time it runs telling me I have logged into a new computer so I've set my email host to delete all these.
 
-## Acknowledgements
+### Acknowledgements
 
 - <https://github.com/n8henrie/alexa-wolfram-alpha> -- A simple skill to query Wolfram Alpha, from which I have cribbed the instructions in this README and some of the boilerplate code.
 - <https://github.com/picklepete/pyicloud> -- A Python library for connecting to iCloud, which I stripped down to the basics for our purposes here.
