@@ -1,4 +1,4 @@
-# Native support for Apple Calendar has been added to Alexa so this repo is not no longer needed.
+# Native support for Apple Calendar has been added to Alexa so this repo is no longer needed.
 
 ## alexa-apple-calendar
 
